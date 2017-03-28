@@ -1,8 +1,8 @@
 FROM alpine:edge
 MAINTAINER Liam Martens (hi@liammartens.com)
 
-# add www-data user
-RUN adduser -D www-data
+# add redis user
+RUN adduser -D redis
 
 # run updates
 RUN apk update && apk upgrade
@@ -16,19 +16,19 @@ RUN apk add --update --no-cache redis
 
 # create redis directories
 RUN mkdir -p /etc/redis /var/log/redis /var/run/redis /var/lib/redis && \
-    chown -R www-data:www-data /etc/redis /var/log/redis /var/run/redis /var/lib/redis
+    chown -R redis:redis /etc/redis /var/log/redis /var/run/redis /var/lib/redis
 
 # chown timezone files
 RUN touch /etc/timezone /etc/localtime && \
-    chown www-data:www-data /etc/localtime /etc/timezone
+    chown redis:redis /etc/localtime /etc/timezone
 
 # set volume
 VOLUME ["/etc/redis", "/var/log/redis", "/var/lib/redis"]
 
 # copy run file
-COPY scripts/run.sh /home/www-data/run.sh
-RUN chmod +x /home/www-data/run.sh
-COPY scripts/continue.sh /home/www-data/continue.sh
-RUN chmod +x /home/www-data/continue.sh
+COPY scripts/run.sh /home/redis/run.sh
+RUN chmod +x /home/redis/run.sh
+COPY scripts/continue.sh /home/redis/continue.sh
+RUN chmod +x /home/redis/continue.sh
 
-ENTRYPOINT ["/home/www-data/run.sh", "su", "-m", "www-data", "-c", "/home/www-data/continue.sh /bin/bash"]
+ENTRYPOINT ["/home/redis/run.sh", "su", "-m", "redis", "-c", "/home/redis/continue.sh /bin/bash"]

@@ -1,5 +1,5 @@
 #!/bin/bash
-export HOME=/home/www-data
+export HOME=/home/redis
 
 if [ -z "$REDIS_PORT" ]; then
 	export PHP_PORT=6379
