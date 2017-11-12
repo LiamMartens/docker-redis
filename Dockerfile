@@ -1,5 +1,5 @@
-FROM alpine:edge
-MAINTAINER Liam Martens (hi@liammartens.com)
+FROM alpine:3.6
+LABEL maintainer="hi@liammartens.com"
 
 # add redis user
 RUN adduser -D redis
