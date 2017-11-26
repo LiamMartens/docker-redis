@@ -1,34 +1,20 @@
-FROM alpine:3.6
+ARG USER='redis'
+FROM liammartens/alpine
 LABEL maintainer="hi@liammartens.com"
 
-# add redis user
-RUN adduser -D redis
-
-# run updates
-RUN apk update && apk upgrade
-
-# add packages
-RUN apk add --update --no-cache \
-    tzdata bash wget curl nano htop perl
+ENV OWN_BY="${USER}:${USER}"
+ENV OWN_DIRS="${OWN_DIRS} /etc/redis /var/log/redis /var/lib/redis"
 
 # install redis
 RUN apk add --update --no-cache redis
 
 # create redis directories
 RUN mkdir -p /etc/redis /var/log/redis /var/run/redis /var/lib/redis && \
-    chown -R redis:redis /etc/redis /var/log/redis /var/run/redis /var/lib/redis
-
-# chown timezone files
-RUN touch /etc/timezone /etc/localtime && \
-    chown redis:redis /etc/localtime /etc/timezone
+    chown -R ${USER}:${USER} /etc/redis /var/log/redis /var/run/redis /var/lib/redis
 
 # set volume
-VOLUME ["/etc/redis", "/var/log/redis", "/var/lib/redis"]
+VOLUME /etc/redis /var/log/redis /var/lib/redis
 
 # copy run file
-COPY scripts/run.sh /home/redis/run.sh
-RUN chmod +x /home/redis/run.sh
-COPY scripts/continue.sh /home/redis/continue.sh
-RUN chmod +x /home/redis/continue.sh
-
-ENTRYPOINT ["/home/redis/run.sh", "su", "-m", "redis", "-c", "/home/redis/continue.sh /bin/bash"]
+COPY scripts/continue.sh ${ENV_DIR}/scripts/continue.sh
+RUN chmod +x ${ENV_DIR}/scripts/continue.sh

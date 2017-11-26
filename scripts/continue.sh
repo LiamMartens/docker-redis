@@ -1,5 +1,5 @@
 #!/bin/bash
-export HOME=/home/redis
+export HOME=/home/$(whoami)
 
 if [ -z "$REDIS_PORT" ]; then
 	export PHP_PORT=6379
@@ -51,7 +51,13 @@ checkRedisConf
 perl -p -i.bak -e "s/port\s+(.+)/port $REDIS_PORT/gi" /etc/redis/redis.conf
 checkRedisConf
 
+# run user scripts
+if [[ -d ${ENV_DIR}/files/.$(whoami) ]]; then
+	chmod +x ${ENV_DIR}/files/.$(whoami)/*
+	run-parts ${ENV_DIR}/files/.$(whoami)
+fi
+
 echo "Starting redis on $REDIS_PORT"
 redis-server /etc/redis/redis.conf --loglevel verbose
 
-exec "$@"
+$SHELL
