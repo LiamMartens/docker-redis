@@ -5,7 +5,7 @@ LABEL maintainer="Liam Martens <hi@liammartens.com>"
 # @user Use root user for install
 USER root
 
-# @user Switch back to root user for build
+# @run Install redis
 RUN apk add --update redis
 
 # @run Create redis directories
