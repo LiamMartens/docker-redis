@@ -1,8 +1,15 @@
-# Custom Redis image
-* Based on Alpine
-* Runs with the redis user (after taking file ownership)
-* Defines 3 volumes (/etc/redis for the configuration, /var/log/redis for the redis log files and /var/lib/redis for the data)
-* Sets the timezone to the value of a TIMEZONE environment variable or to UTC by default
-* Automatically detects the IP to bind to and updates the configuration file automatically
-* Sets the port to 6379 but you can override it by setting an environment variable called REDIS_PORT (configuration file will be updated automatically)
-* Aside from redis also installs some useful tools such htop, nano, ...
+# Redis
+This image is built on Alpine
+
+## Build arguments
+* `USER`: The non-root user to be used in the container
+* Any build arguments from the `Alpine` base image [liammartens/alpine](https://hub.docker.com/r/liammartens/alpine/)
+
+## Volumes
+* `/etc/redis`: For Redis configuration (default files are copied in if volume is not used)
+* `/var/log/redis`: For Redis log file(s)
+* `/var/lib/redis`: For persistent Redis database
+
+## Environment
+You can control the Redis configuration using environment variables. Aside from that the `redis` bind IP is automatically set to the container IP.
+If you want to override certain Redis configuration variables you can pass them in the following environment variable format `REDIS_PROTECTED_MODE` which will change the `protected_mode` setting in the `redis.conf` file. You can also override the listening port using the `REDIS_PORT` environment variable (defaults to 6379).

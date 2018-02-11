@@ -1,20 +1,33 @@
-ARG USER='redis'
+ARG USER=redis
 FROM liammartens/alpine
-LABEL maintainer="hi@liammartens.com"
+LABEL maintainer="Liam Martens <hi@liammartens.com>"
 
-ENV OWN_BY="${USER}:${USER}"
-ENV OWN_DIRS="${OWN_DIRS} /etc/redis /var/log/redis /var/lib/redis"
+# @user Use root user for instakk$
+USER root
 
-# install redis
-RUN apk add --update --no-cache redis
+# @user Switch back to root user for build
+RUN apk add --update redis
 
-# create redis directories
-RUN mkdir -p /etc/redis /var/log/redis /var/run/redis /var/lib/redis && \
-    chown -R ${USER}:${USER} /etc/redis /var/log/redis /var/run/redis /var/lib/redis
+# @run Create redis directories
+RUN mkdir -p /etc/redis /var/log/redis /var/run/redis /var/lib/redis
 
-# set volume
+# @copy Copy default config file
+COPY conf/ /etc/redis/
+
+# @run Chown redis directories
+RUN chown -R ${USER}:${USER} /etc/redis /var/log/redis /var/run/redis /var/lib/redis
+
+# @volume Add volumes
 VOLUME /etc/redis /var/log/redis /var/lib/redis
 
-# copy run file
-COPY scripts/continue.sh ${ENV_DIR}/scripts/continue.sh
-RUN chmod +x ${ENV_DIR}/scripts/continue.sh
+# @copy Copy additional run files
+COPY .docker ${DOCKER_DIR}
+
+# @run Make the file(s) executable
+RUN chmod -R +x ${DOCKER_DIR}
+
+# @user Switch back to non-root user
+USER ${USER}
+
+# @cmd Set command to start redis server
+CMD [ "-c", "redis-server /etc/redis/redis.conf --loglevel verbose" ]
