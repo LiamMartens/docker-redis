@@ -2,7 +2,7 @@ ARG USER=redis
 FROM liammartens/alpine
 LABEL maintainer="Liam Martens <hi@liammartens.com>"
 
-# @user Use root user for instakk$
+# @user Use root user for install
 USER root
 
 # @user Switch back to root user for build
