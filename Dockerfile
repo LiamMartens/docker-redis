@@ -17,9 +17,6 @@ COPY conf/ /etc/redis/
 # @run Chown redis directories
 RUN chown -R ${USER}:${USER} /etc/redis /var/log/redis /var/run/redis /var/lib/redis
 
-# @volume Add volumes
-VOLUME /etc/redis /var/log/redis /var/lib/redis
-
 # @copy Copy additional run files
 COPY .docker ${DOCKER_DIR}
 

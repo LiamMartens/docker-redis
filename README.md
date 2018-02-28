@@ -5,7 +5,7 @@ This image is built on Alpine
 * `USER`: The non-root user to be used in the container
 * Any build arguments from the `Alpine` base image [liammartens/alpine](https://hub.docker.com/r/liammartens/alpine/)
 
-## Volumes
+## Directories
 * `/etc/redis`: For Redis configuration (default files are copied in if volume is not used)
 * `/var/log/redis`: For Redis log file(s)
 * `/var/lib/redis`: For persistent Redis database
