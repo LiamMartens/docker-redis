@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# get the container IP address and export it as an environment variable
-export REDIS_TCP=$(awk 'END{print $1}' /etc/hosts)
-
-# check redis port
-if [ -z "$REDIS_PORT" ]; then
-	export REDIS_PORT=6379
-fi
-
 # function to check redis.conf config and bak
 checkRedisConf() {
 	if [[ $(cat /etc/redis/redis.conf) =~ "^\s*$" ]]; then
@@ -34,10 +26,6 @@ for VAR in "${ENV_VARS[@]}"; do
 		checkRedisConf
 	fi
 done
-
-# set redis listen port
-perl -p -i.bak -e "s/bind\s+(.+)/bind $REDIS_TCP/gi" /etc/redis/redis.conf
-checkRedisConf
 
 # set redis listen port
 perl -p -i.bak -e "s/port\s+(.+)/port $REDIS_PORT/gi" /etc/redis/redis.conf
