@@ -1,5 +1,5 @@
 # Redis
-This image is built on Alpine
+This image is built on Alpine 3.10
 
 ## Build arguments
 * `USER`: The non-root user to be used in the container
