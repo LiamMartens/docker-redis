@@ -1,5 +1,5 @@
 ARG USER=redis
-FROM liammartens/alpine:3.10
+FROM liammartens/alpine:3.11
 LABEL maintainer="Liam Martens <hi@liammartens.com>"
 
 # @env default redis port
